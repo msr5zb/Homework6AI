@@ -1,0 +1,117 @@
+
+<script>
+
+    //Assumeing 1 numberMine per Column!
+    int workingColumn = this.currentColumn;
+    int previousgColumn = this.currentColumn;
+    int nextColumn = this.currentColumn;
+    
+    List<StateSpace> children = new ArrayList<StateSpace>();
+    int disasterFlag = -1;
+    
+    for(int i = 0; i < this.rows; i++){
+        if(workingColumn > 0 && i > 0 board[i][previousColumn].equals("numberMine") && this.numberMineMap[i+1][previousColumn].isActive()){
+            disasterFlag = 1;
+        }  
+    }
+    
+    //First Check to See if a NumberMine NEEDS attending to in the previousColumn
+    for(int i = 0; i < this.rows; i++){
+        
+        //If there is a mine, Check if it has been attended to or not... Note can be diagonal, or side by side
+        
+        //Check UpDiagonal - First Chance at Resolving
+        if(workingColumn > 0 && i > 0 board[i+1][previousColumn].equals("numberMine") && this.numberMineMap[i+1][previousColumn].isActive()){
+
+            //If you can make a child to resolve the mine, do it! Check if point is available though.
+            if(!this.blacklistedPoints.contains(i, this.currentColumn)){
+                //We have a possible StateSpace to resolve the mine, no need to panic
+                disasterFlag = -1;  
+                
+                //Create new Child
+                StateSpace child = new StateSpace(this.row, this.column);
+                child.clone(this);
+                child.numberMineMap[i+1][previousColumn].setActive(false);
+                child.board[i][currentColumn].setMark("queen");
+                child.currentColumn = this.currentColumn+1;
+            
+                //BlackList All Neighbor Spaces Around the Mine in the Area (Ensures You do need Exceed the Number)
+                child.blacklistedPoints.add(i,this.column);
+                child.blacklistedPoints.generateMineBorder(i+1,previousColumn);
+            
+                children.add(child);
+                continue;
+            }
+        }
+        
+        //Check Left         - Second Chance at Resolving
+        if(workingColumn > 0 && i > 0 board[i][previousColumn].equals("numberMine") && this.numberMineMap[i][previousColumn].isActive()){
+
+            //If you can make a child to resolve the mine, do it! Check if point is available though.
+            if(!this.blacklistedPoints.contains(i, this.currentColumn)){
+                //We have a possible StateSpace to resolve the mine, no need to panic
+                disasterFlag = -1;  
+                
+                //Create new Child
+                StateSpace child = new StateSpace(this.row, this.column);
+                child.
+                
+                child.clone(this);
+                child.numberMineMap[i][previousColumn].setActive(false);
+                child.board[i][currentColumn].setMark("queen");
+                child.currentColumn = this.currentColumn+1;
+            
+                //BlackList All Neighbor Spaces Around the Mine in the Area (Ensures You do need Exceed the Number)
+                child.blacklistedPoints.add(i,this.column);
+                child.blacklistedPoints.generateMineBorder(i,previousColumn);
+            
+                children.add(child);
+                continue;
+            }
+        }
+            
+        //Check DownDiagonal   - Last Chance at Resolving, if cannot be resolved, return null!
+        if(workingColumn < this.rows && i > 0 board[i+1][previousColumn].equals("numberMine") && this.numberMineMap[i+1][previousColumn].isActive()){
+
+            //If you can make a child to resolve the mine, do it! Check if point is available though.
+            if(!this.blacklistedPoints.contains(i, this.currentColumn)){
+                //We have a possible StateSpace to resolve the mine, no need to panic
+                disasterFlag = -1;  
+                
+                //Create new Child
+                StateSpace child = new StateSpace(this.row, this.column);
+                child.clone(this);
+                child.numberMineMap[i+1][previousColumn].setActive(false);
+                child.board[i][currentColumn].setMark("queen");
+                child.currentColumn = this.currentColumn+1;
+            
+                //BlackList All Neighbor Spaces Around the Mine in the Area (Ensures You do need Exceed the Number)
+                child.blacklistedPoints.add(i,this.column);
+                child.blacklistedPoints.generateMineBorder(i+1,previousColumn);
+            
+                children.add(child);
+                continue;
+            }
+        }
+
+        
+
+    }
+    
+    
+    
+    
+    
+    
+    //If a Bomb that NEEDED to be resolved was resolved... Return true...
+    if(disasterFlag == -1){
+        return true;
+    }
+    //Else, disaster, board cannot be completed, Return false!
+    else{
+        return false;
+    }
+
+
+
+</script>
